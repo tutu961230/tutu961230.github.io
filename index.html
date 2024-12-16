@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Generator</title>
+</head>
+<body>
+  <h1>Generate a PDF from URL</h1>
+  <form id="urlForm">
+    <label for="urlInput">Enter the URL:</label><br><br>
+    <input type="url" id="urlInput" name="urlInput" placeholder="https://example.com" required style="width: 300px;"><br><br>
+    <button type="submit">Generate PDF</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('urlForm');
+    const responseText = document.getElementById('response');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const urlInput = document.getElementById('urlInput').value;
+
+      // Make a request to your backend
+      const response = await fetch('https://your-backend-service.com/generate_pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: urlInput }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        responseText.innerHTML = `<a href="${data.pdf_url}" download>Download your PDF</a>`;
+      } else {
+        responseText.textContent = 'Failed to generate PDF. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
